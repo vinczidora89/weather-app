@@ -5,7 +5,7 @@ import Utility from '../Utility';
 export const useWeatherStore = defineStore({
     id: 'weather',
     state: () => ({
-        baseUrl: 'http://api.openweathermap.org',
+        baseUrl: '//api.openweathermap.org',
         coordinates: {
             lat: null,
             long: null
