@@ -11,6 +11,7 @@ export const useWeatherStore = defineStore({
             long: null
         },
         errorType: null,
+        locationDataDenied: false,
         formattedAddress: null,
         isLoading: false,
         locationSupportStatus: null,
@@ -29,27 +30,24 @@ export const useWeatherStore = defineStore({
         cityChanged: (state) => state.weatherCity && state.searchTerm && state.selectedCity
             && (state.selectedCity !== state.weatherCity || state.selectedCity !== state.searchTerm),
         currentIcon: (state) => state.weatherCurrent && state.weatherCurrent.weather[0].icon,
+        currentSunrise: (state) => state.weatherCurrent
+            && Utility.timestampToTime(state.weatherCurrent.sunrise),
+        currentSunset: (state) => state.weatherCurrent
+            && Utility.timestampToTime(state.weatherCurrent.sunset),
+        currentWeather: (state) => state.weatherCurrent && state.weatherCurrent.weather[0],
+        coordinatesFilled: (state) => state.coordinates.lat && state.coordinates.long,
         forecastIcon: (state) => {
             return (index) => state.weatherForecast && state.weatherForecast[index].weather[0].icon
         },
         pastIcon: (state) => {
             return (index) => state.weatherPast && state.weatherPast[index].weather[0].icon
         },
-        currentSunrise: (state) => state.weatherCurrent
-            && Utility.timestampToTime(state.weatherCurrent.sunrise),
-        currentSunset: (state) => state.weatherCurrent
-            && Utility.timestampToTime(state.weatherCurrent.sunset),
-        currentWeather: (state) => state.weatherCurrent && state.weatherCurrent.weather[0],
         todaysTemperatures: (state) => state.weatherToday && state.weatherToday.temp,
     },
     actions: {
         setCoordinates(value) {
             this.coordinates.lat = value.lat;
             this.coordinates.long = value.long;
-        },
-        async checkForLocationPermission() {
-            const response = await navigator.permissions.query({ name: 'geolocation' });
-            this.locationSupportStatus = response.state;
         },
         async getWeatherData() {
             this.isLoading = true;
@@ -67,7 +65,6 @@ export const useWeatherStore = defineStore({
                 this.weatherCountry = this.selectedCountry;
                 this.isLoading = false;
             }
-
         },
         async getWeather(data) {
             const key = import.meta.env.VITE_OPENWEATHER_KEY;

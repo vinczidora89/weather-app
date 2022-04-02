@@ -2,22 +2,31 @@
     import { useWeatherStore } from '@/stores/weather';
     import { computed } from "@vue/reactivity";
     import cities from 'cities.json';
+    import { onMounted } from "vue";
 
     const store = useWeatherStore();
 
-    store.$subscribe((mutation, state) => {
-      if (state.formattedAddress) {
-        const addressCity = state.formattedAddress.split(',')[0];
-        const matchingCity = () => {
-          return cities.find(city => {
+    onMounted(() => {
+      store.$subscribe((mutation) => {
+        const isFormattedAddress = mutation.events.key === 'formattedAddress';
+        const formattedAddressExists = !!mutation.events.newValue;
+        if (isFormattedAddress && formattedAddressExists) {
+          const addressCity = mutation.events.newValue.split(',')[0];
+          let matchingCity = null;
+          cities.find(city => {
             if (addressCity === city.name) {
-              return city;
+              matchingCity = city;
             }
-          })
-        };
+          });
 
-        console.log(matchingCity());
-      }
+          if (matchingCity) {
+            store.selectedCity = matchingCity.name;
+            store.searchTerm = matchingCity.name;
+            store.selectedCountry = matchingCity.country;
+            store.getWeatherData();
+          }
+        }
+      });
     });
 
     const shouldShowOptions = computed(() => {
@@ -29,17 +38,16 @@
     });
 
     const searchCities = computed(() => {
+        const selectedCities = [];
         if (store.searchTerm === '' || store.searchTerm === null) {
-            return [];
+            return selectedCities;
         }
-
-        let matchCount = 0;
-        return cities.filter(city => {
-            if (city.name.toLowerCase().includes(store.searchTerm.toLowerCase()) && matchCount < 10) {
-                matchCount++;
-                return city
+        cities.filter(city => {
+            if (city.name.toLowerCase().includes(store.searchTerm.toLowerCase()) && selectedCities.length < 10) {
+                selectedCities.push(city);
             }
         })
+        return selectedCities;
     });
 
     const selectCity = (city) => {
@@ -154,35 +162,8 @@
         }
 
         &__button {
-            background-color: $color-burnt-sienna;
-            border: 0;
-            border-radius: 8px;
-            color: $color-white;
-            cursor: pointer;
-            font-family: Roboto, Arial, Helvetica, sans-serif;
-            font-size: 16px;
-            flex: 0 0 106px;
-            height: 40px;
-            line-height: 40px;
-            outline: unset;
-            margin: 0 0 0 10px;
-            padding: 0 20px;
-            text-transform: uppercase;
-
-            &:hover {
-                background-color: darken($color-burnt-sienna, 10%);
-            }
-
-            &:focus {
-                border: 0;
-                box-shadow: 0 0 0 2px $color-black;
-                outline: unset;
-            }
-
-            &:disabled {
-                background-color: lighten($color-burnt-sienna, 20%);
-                cursor: not-allowed;
-            }
+          @include button-primary();
+          margin: 0 0 0 10px;
         }
 
         @media #{$tablet}, #{$desktop} {

@@ -1,0 +1,51 @@
+@import "./colors";
+
+@mixin button-primary ($base: $color-burnt-sienna, $font: $color-white, $padding: 0 20px) {
+    background-color: $base;
+    border: 0;
+    border-radius: 8px;
+    color: $font;
+    cursor: pointer;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    flex: 0 0 106px;
+    height: 40px;
+    outline: unset;
+    padding: $padding;
+    text-transform: uppercase;
+
+    &:hover {
+      background-color: darken($base, 10%);
+    }
+
+    &:focus {
+      border: 0;
+      box-shadow: 0 0 0 2px $color-black;
+      outline: unset;
+    }
+
+    &:disabled {
+      background-color: lighten($base, 20%);
+      cursor: not-allowed;
+    }
+}
+
+@mixin button-secondary ($base: $color-burnt-sienna, $font: $color-white, $padding: 0 20px) {
+  @include button-primary($base, $font, $padding);
+  background-color: transparent;
+  border: 2px solid $base;
+  color: $base;
+  font-weight: 700;
+
+  &:hover,
+  &:focus {
+    background-color: transparent;
+    border: 2px solid darken($base, 10%);
+    color: darken($base, 10%);
+  }
+
+  &:disabled {
+    background-color: transparent;
+    border: 2px solid lighten($base, 20%);
+  }
+}

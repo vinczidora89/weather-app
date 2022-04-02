@@ -1,7 +1,7 @@
 <script setup>
     import ChevronIcon from '../icons/IconChevron.vue'
     import { useWeatherStore } from '@/stores/weather';
-    import {reactive} from "@vue/reactivity";
+    import { reactive } from "@vue/reactivity";
 
     const state= reactive({
         isOpen: false,
