@@ -5,7 +5,7 @@
 
     const store = useWeatherStore();
 
-    const iconUrl = computed(() => `http://openweathermap.org/img/wn/${store.currentIcon}@2x.png`);
+    const iconUrl = computed(() => `${store.baseUrlIcons}/img/wn/${store.currentIcon}@2x.png`);
 </script>
 
 <template>

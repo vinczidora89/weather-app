@@ -6,6 +6,7 @@ export const useWeatherStore = defineStore({
     id: 'weather',
     state: () => ({
         baseUrl: '//api.openweathermap.org',
+        baseUrlIcons: '//openweathermap.org',
         coordinates: {
             lat: null,
             long: null

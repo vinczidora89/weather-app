@@ -15,7 +15,7 @@
     const date = computed(() => Utility.timestampToDate(props.forecast.dt));
     const temp = computed(() => props.type === 'past' ? props.forecast.temp : props.forecast.temp.day);
     const iconName = props.type === 'past' ? store.pastIcon(props.index) : store.forecastIcon(props.index);
-    const iconUrl = computed(() => `http://openweathermap.org/img/wn/${iconName}.png`);
+    const iconUrl = computed(() => `${store.baseUrlIcons}/img/wn/${iconName}.png`);
 </script>
 
 <template>
