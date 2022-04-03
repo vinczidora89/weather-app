@@ -1,10 +1,10 @@
 <script setup>
   import HeaderComponent from './components/HeaderComponent.vue';
   import CityInput from './components/CityInput.vue';
-  import LoaderComponent from './components/LoaderComponent.vue';
   import LocationMap from './components/location/LocationMap.vue';
   import RequestLocation from './components/location/RequestLocation.vue';
   import WeatherCurrent from './components/weather/WeatherCurrent.vue';
+  import WeatherPlaceholder from './components/weather/WeatherPlaceholder.vue';
   import WeatherWrapper from './components/weather/WeatherWrapper.vue';
   import { computed } from "@vue/reactivity";
   import { useWeatherStore } from '@/stores/weather';
@@ -15,39 +15,34 @@
   const futureWeatherData = computed(() => store.weatherForecast && store.weatherForecast.length > 0);
   const pastWeatherData = computed(() => store.weatherPast && store.weatherPast.length === 5);
 
-  const shouldShowLocationRequest = computed(() =>
-      !store.locationDataDenied && !store.coordinatesFilled
-  );
-
   const shouldShowLocationMap = computed(() =>
-      store.coordinatesFilled && !store.locationDataDenied
+      store.coordinatesFilled
   );
 
   onMounted(() => {
     const locationDataDenied = localStorage.getItem('locationDataDenied');
     if (locationDataDenied && locationDataDenied === 'true') {
-      store.locationDataDenied = true;
+      store.locationDataHide = true;
     }
+    store.getWeatherByDefaultCity('Debrecen');
   })
 </script>
 
 <template>
-  <header>
+  <header class="app__header">
+    <RequestLocation v-if="!store.locationDataHide"></RequestLocation>
     <HeaderComponent />
+    <CityInput class="app__location-city"></CityInput>
   </header>
 
-  <main>
-    <RequestLocation v-if="shouldShowLocationRequest"></RequestLocation>
-    <div class="app__location-wrapper">
-      <CityInput class="app__location-city"></CityInput>
-      <LocationMap class="app__location-map" v-if="shouldShowLocationMap">
-      </LocationMap>
-    </div>
-    <div class="app__loader-wrapper" v-if="store.isLoading">
-      <LoaderComponent></LoaderComponent>
-    </div>
+  <main class="app__main">
+    <WeatherPlaceholder v-if="store.isLoading"></WeatherPlaceholder>
     <div v-else :class="['app__weather-wrapper', {'is-changed': store.cityChanged}]">
-      <WeatherCurrent></WeatherCurrent>
+      <div class="app__current-and-map">
+        <WeatherCurrent></WeatherCurrent>
+        <LocationMap class="app__location-map" v-if="shouldShowLocationMap">
+        </LocationMap>
+      </div>
       <WeatherWrapper v-if="futureWeatherData"
                       title="Weather for the next 7 days:"
                       type="future"
@@ -65,9 +60,24 @@
 <style lang="scss">
 @import './assets/base.css';
 .app {
+  &__header {
+    background: url('./assets/bgr_mobile.jpeg') top center no-repeat;
+    padding: 150px 0 50px;
+    position: relative;
+
+    &:after {
+      background: linear-gradient(transparent, $color-abbey);
+      content: '';
+      height: 20px;
+      left: 0;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+  }
+
   &__weather-wrapper {
     margin: 0 auto;
-    max-width: 300px;
     padding: 10px 0;
     width: 100%;
 
@@ -87,32 +97,36 @@
       }
     }
   }
+  @media #{$tablet} {
+    &__header {
+      background: url('./assets/bgr_tablet.jpeg') top center no-repeat;
+      padding: 114px 0 80px;
+    }
+  }
 
-  &__loader-wrapper {
-    margin: 50px auto;
-    width: 100px;
+  @media #{$desktop} {
+    &__header {
+      background: url('./assets/bgr_desktop.jpeg') top center no-repeat;
+      padding: 114px 0 80px;
+    }
   }
 
   @media #{$tablet}, #{$desktop} {
-    &__location {
-      &-wrapper {
-        display: flex;
-        margin: 0 auto;
-        max-width: 800px;
-        width: 100%;
-      }
-
-      &-map {
-        flex: 0 0 300px;
-      }
+    &__current-and-map {
+      display: flex;
+      justify-content: center;
+      margin: 30px auto;
+      max-width: 6000px;
+      width: 100%;
     }
 
-    &__weather-wrapper {
-      max-width: 800px;
+    &__current {
+      flex: 0 1 400px;
     }
 
-    &__loader-wrapper {
-      margin: 100px auto;
+    &__location-map {
+      flex: 0 1 200px;
+      margin: 0 0 0 10px;
     }
   }
 }

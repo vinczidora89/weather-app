@@ -37,7 +37,7 @@
                     <span class="weather-details__data-number">{{ store.weatherCurrent.pressure }} hPa</span>
                 </div>
                 <div class="weather-details__data-wrapper">
-                    <span class="weather-details__data-label">Sunrise/Sunset Time:</span>
+                    <span class="weather-details__data-label">Sunrise/Sunset:</span>
                     <span class="weather-details__data-number">{{ store.currentSunrise }} / {{ store.currentSunset }}</span>
                 </div>
             </div>
@@ -86,6 +86,12 @@
                         transform: rotate(180deg);
                     }
                 }
+            }
+        }
+
+        @media #{$tablet}, #{$desktop} {
+            &__header {
+                margin: 35px 0 10px;
             }
         }
     }

@@ -27,9 +27,6 @@
 
 <style scoped lang="scss">
     .weather-wrappper {
-        background-color: lighten($color-abbey, 10%);
-        border-radius: 4px;
-        box-shadow: 3px 3px 4px $color-black-transparent;
         max-width: 600px;
         margin: 20px auto;
         padding: 20px;
@@ -49,6 +46,10 @@
         }
 
         @media #{$tablet}, #{$desktop} {
+            background-color: lighten($color-abbey, 10%);
+            border-radius: 4px;
+            box-shadow: 3px 3px 4px $color-black-transparent;
+
             &__wrapper {
                 display: flex;
                 justify-content: center;

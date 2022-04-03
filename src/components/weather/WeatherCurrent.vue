@@ -19,27 +19,12 @@
                 {{ store.currentWeather.main }}
                 ({{ store.currentWeather.description }})
             </span>
-            <span class="weather-current__data-title">
-              Temperatures:
+            <span class="weather-current__temperature-main">
+                     {{ Math.round(store.currentTemperature) }} &deg;C
             </span>
-            <div class="weather-current__data-wrapper">
-                <span class="weather-current__data-label">Current:</span>
-                <span>
-                     {{ Math.round(store.todaysTemperatures.day) }} &deg;C
-                </span>
-            </div>
-            <div class="weather-current__data-wrapper">
-                <span class="weather-current__data-label">Highest:</span>
-                <span>
-                     {{ Math.round(store.todaysTemperatures.max) }} &deg;C
-                </span>
-            </div>
-            <div class="weather-current__data-wrapper">
-                <span class="weather-current__data-label">Lowest:</span>
-                <span>
-                     {{ Math.round(store.todaysTemperatures.min) }} &deg;C
-                </span>
-            </div>
+            <span class="weather-current__temperature-details">
+              (min: {{ Math.round(store.todaysTemperatures.min) }} &deg;C, max: {{ Math.round(store.todaysTemperatures.max) }} &deg;C )
+            </span>
         </div>
 
         <WeatherDetails></WeatherDetails>
@@ -52,44 +37,73 @@
         border-radius: 4px;
         box-shadow: 3px 3px 4px $color-black-transparent;
         max-width: 400px;
-        margin: 30px auto;
-        padding: 20px;
-        width: 100%;
+        margin: 20px auto;
+        padding: 10px;
+        width: 80%;
 
         &__icon {
             display: block;
-            margin: 10px auto;
+            margin: 0 auto;
+            width: 80px;
         }
 
         &__location {
             display: block;
-            font-size: 30px;
+            font-size: 26px;
             text-align: center;
         }
 
         &__description {
             color: $color-burnt-sienna;
             display: block;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             text-align: center;
         }
 
-        &__data {
-            color: $color-abbey;
-
-            &-title {
-              display: block;
-              font-size: 16px;
-              font-weight: 700;
-              margin: 10px 0;
+        &__temperature {
+            &-main {
+                display: block;
+                font-size: 20px;
+                margin: 0 auto;
+                text-align: center;
             }
 
-            &-label {
-                display: inline-block;
-                font-weight: 700;
-                margin: 0 10px 0 0;
+            &-details {
+                display: block;
+                font-size: 16px;
+                font-style: italic;
+                margin: 0 auto;
+                text-align: center;
             }
+        }
+
+        @media #{$tablet}, #{$desktop} {
+            margin: 0;
+
+            &__icon {
+                margin: 10px auto;
+                width: 100px;
+            }
+
+            &__location {
+                font-size: 30px;
+            }
+
+            &__description {
+                font-size: 22px;
+            }
+
+            &__temperature {
+                &-main {
+                    font-size: 26px;
+                    margin: 20px auto 0;
+                }
+
+                &-details {
+                    font-size: 20px;
+                }
+          }
         }
     }
 </style>

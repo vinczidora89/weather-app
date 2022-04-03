@@ -9,7 +9,7 @@
 }
 
 :root {
-  --color-background: var(--vt-c-mercury);
+  --color-background: var(--vt-c-abbey);
   --color-text: var(--vt-c-black);
   --section-gap: 160px;
 }

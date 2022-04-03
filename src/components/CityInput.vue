@@ -53,7 +53,7 @@
         store.selectedCity= city.name;
         store.selectedCountry= city.country;
         store.searchTerm = city.name;
-        store.setCoordinates({lat: city.lat, long: city.lng})
+        store.setCoordinates({lat: Number(city.lat), long: Number(city.lng)})
     };
 </script>
 
@@ -64,14 +64,12 @@
         </h2>
         <div class="city-input__wrapper">
             <div class="city-input__input-wrapper">
-                <label for="weather-city" class="city-input__label">
-                    City:
-                </label>
                 <input type="text"
                        autocomplete="off"
                        name="weather-city"
                        id="weather-city"
                        class="city-input__input"
+                       placeholder="Find a city..."
                        v-model="store.searchTerm">
                 <ul v-if="searchCities.length && shouldShowOptions"
                     class="city-input__options">
@@ -99,6 +97,7 @@
         width: 100%;
 
         &__title {
+            color: $color-mercury;
             font-size: 16px;
             margin: 0 0 10px;
         }
@@ -109,42 +108,37 @@
             justify-content: space-between;
         }
 
-        &__label {
-            display: block;
-            font-size: 14px;
-            font-weight: 700;
-            margin: 0 0 6px;
-        }
-
         &__input-wrapper {
             flex: 1 1 auto;
             position: relative;
         }
 
         &__input {
-            border: 1px solid $color-black;
+            background-color: $color-mercury;
+            border: none;
             border-radius: 4px;
             display: block;
+            height: 40px;
+            line-height: 40px;
             outline: none;
             padding: 10px;
             width: 100%;
 
             &:active,
             &:focus {
-                border: 2px solid $color-black;
+              box-shadow: 3px 3px 4px $color-black-transparent;
             }
         }
 
         &__options {
-            background-color: $color-white;
-            border: 1px solid $color-black;
-            border-top: none;
-          border-radius: 0 0 4px 4px;
+            background-color: $color-mercury;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 3px 3px 4px $color-black-transparent;
             padding: 0;
             left: 0;
             list-style: none;
             position: absolute;
-            top: 62px;
+            top: 38px;
             width: 100%;
             z-index: 1;
         }

@@ -1,6 +1,10 @@
+/* eslint-disable no-undef */
 import { defineStore } from 'pinia';
 import axios from "axios";
+import cities from 'cities.json';
 import Utility from '../Utility';
+import {Loader} from "@googlemaps/js-api-loader";
+import {computed} from "@vue/reactivity";
 
 export const useWeatherStore = defineStore({
     id: 'weather',
@@ -12,7 +16,7 @@ export const useWeatherStore = defineStore({
             long: null
         },
         errorType: null,
-        locationDataDenied: false,
+        locationDataHide: false,
         formattedAddress: null,
         isLoading: false,
         locationSupportStatus: null,
@@ -35,6 +39,7 @@ export const useWeatherStore = defineStore({
             && Utility.timestampToTime(state.weatherCurrent.sunrise),
         currentSunset: (state) => state.weatherCurrent
             && Utility.timestampToTime(state.weatherCurrent.sunset),
+        currentTemperature: (state) => state.weatherCurrent && state.weatherCurrent.temp,
         currentWeather: (state) => state.weatherCurrent && state.weatherCurrent.weather[0],
         coordinatesFilled: (state) => state.coordinates.lat && state.coordinates.long,
         forecastIcon: (state) => {
@@ -46,9 +51,50 @@ export const useWeatherStore = defineStore({
         todaysTemperatures: (state) => state.weatherToday && state.weatherToday.temp,
     },
     actions: {
+        getWeatherByDefaultCity(cityName) {
+            let matchingCity = null;
+            cities.find(city => {
+                if (cityName === city.name) {
+                    matchingCity = city;
+                }
+            });
+
+            if (matchingCity) {
+                this.selectedCity = matchingCity.name;
+                this.searchTerm = matchingCity.name;
+                this.selectedCountry = matchingCity.country;
+
+                if (!this.coordinatesFilled) {
+                    this.coordinates.lat = Number(matchingCity.lat);
+                    this.coordinates.long = Number(matchingCity.lng);
+                }
+
+                this.getWeatherData();
+            }
+        },
         setCoordinates(value) {
             this.coordinates.lat = value.lat;
             this.coordinates.long = value.long;
+        },
+        async geocodeCoordinates() {
+            const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+            const currentPosition = {
+                lat: this.coordinates.lat,
+                lng: this.coordinates.long,
+            };
+            const loader = new Loader({ apiKey: GOOGLE_MAPS_API_KEY });
+            await loader.load();
+            const geocoder = new google.maps.Geocoder();
+            geocoder
+                .geocode({ location:  currentPosition })
+                .then((response) => {
+                    if (response.results[0]) {
+                        this.formattedAddress = response.results[0].formatted_address;
+                    } else {
+                        this.hasError = true
+                    }
+                })
+                .catch(() => this.hasError = true);
         },
         async getWeatherData() {
             this.isLoading = true;

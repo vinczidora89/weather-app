@@ -16,10 +16,12 @@
     const temp = computed(() => props.type === 'past' ? props.forecast.temp : props.forecast.temp.day);
     const iconName = props.type === 'past' ? store.pastIcon(props.index) : store.forecastIcon(props.index);
     const iconUrl = computed(() => `${store.baseUrlIcons}/img/wn/${iconName}.png`);
+
+    const isEven = (props.index + 1) % 2 === 0;
 </script>
 
 <template>
-    <div class="weather-simple">
+    <div :class="['weather-simple', {'is-even': isEven}]">
         <img v-if="store.currentIcon" class="weather-simple__icon" :src="iconUrl"/>
         <span class="weather-simple__data weather-simple__data--date">
             {{ date }}
@@ -36,10 +38,16 @@
         background-color: $color-white;
         border-radius: 4px;
         box-shadow: 3px 3px 4px $color-black-transparent;
-        padding: 10px 14px;
+        padding: 10px;
+
+        &__icon {
+            display: block;
+            margin: 0 auto;
+        }
 
         &__data {
             display: block;
+            text-align: center;
 
             &--date {
                 color: darken($color-burnt-sienna, 10%);
@@ -52,6 +60,10 @@
         }
 
         @media #{$tablet}, #{$desktop} {
+            &.is-even {
+              background-color: darken($color-white, 10%);
+            }
+
             & + .weather-simple {
                 margin: 0 0 0 6px;
             }
