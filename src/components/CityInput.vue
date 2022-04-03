@@ -2,32 +2,31 @@
     import { useWeatherStore } from '@/stores/weather';
     import { computed } from "@vue/reactivity";
     import cities from 'cities.json';
-    import { onMounted } from "vue";
+    import {  watch } from "vue";
 
     const store = useWeatherStore();
 
-    onMounted(() => {
-      store.$subscribe((mutation) => {
-        const isFormattedAddress = mutation.events.key === 'formattedAddress';
-        const formattedAddressExists = !!mutation.events.newValue;
-        if (isFormattedAddress && formattedAddressExists) {
-          const addressCity = mutation.events.newValue.split(',')[0];
-          let matchingCity = null;
-          cities.find(city => {
-            if (addressCity === city.name) {
-              matchingCity = city;
-            }
-          });
+    watch(
+        () => store.formattedAddress,
+        (newVal) => {
+          if (newVal) {
+            const addressCity = newVal.split(',')[0];
+            let matchingCity = null;
+            cities.find(city => {
+              if (addressCity === city.name) {
+                matchingCity = city;
+              }
+            });
 
-          if (matchingCity) {
-            store.selectedCity = matchingCity.name;
-            store.searchTerm = matchingCity.name;
-            store.selectedCountry = matchingCity.country;
-            store.getWeatherData();
+            if (matchingCity) {
+              store.selectedCity = matchingCity.name;
+              store.searchTerm = matchingCity.name;
+              store.selectedCountry = matchingCity.country;
+              store.getWeatherData();
+            }
           }
         }
-      });
-    });
+    )
 
     const shouldShowOptions = computed(() => {
         return store.searchTerm !== store.selectedCity;
