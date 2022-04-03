@@ -4,7 +4,6 @@ import axios from "axios";
 import cities from 'cities.json';
 import Utility from '../Utility';
 import {Loader} from "@googlemaps/js-api-loader";
-import {computed} from "@vue/reactivity";
 
 export const useWeatherStore = defineStore({
     id: 'weather',
@@ -48,6 +47,8 @@ export const useWeatherStore = defineStore({
         pastIcon: (state) => {
             return (index) => state.weatherPast && state.weatherPast[index].weather[0].icon
         },
+        searchButtonDisabled: (state) => state.weatherCity && state.searchTerm && state.selectedCity
+            && (state.selectedCity !== state.weatherCity && state.selectedCity === state.searchTerm),
         todaysTemperatures: (state) => state.weatherToday && state.weatherToday.temp,
     },
     actions: {

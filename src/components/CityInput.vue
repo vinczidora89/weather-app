@@ -33,7 +33,7 @@
     });
 
     const searchButtonDisabled = computed(() => {
-      return store.weatherCity && !store.cityChanged;
+      return store.weatherCity && !store.searchButtonDisabled;
     });
 
     const searchCities = computed(() => {

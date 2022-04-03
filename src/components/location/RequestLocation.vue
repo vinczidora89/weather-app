@@ -3,7 +3,6 @@
   import { useWeatherStore } from '@/stores/weather';
   import IconClose from '../icons/IconClose.vue';
   import LoaderComponent from '../LoaderComponent.vue';
-  import Utility from "../../Utility";
 
   const store = useWeatherStore();
   const state= reactive({
@@ -11,8 +10,6 @@
     gettingLocation: false,
     location: null,
   });
-
-  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
   const getLocation = async() => {
     return new Promise((resolve, reject) => {
