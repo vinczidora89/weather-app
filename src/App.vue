@@ -53,6 +53,12 @@
                       type="past"
                       :days="store.weatherPast">
       </WeatherWrapper>
+      <span class="app__credentials">
+        Background image by Stephen O'Donnell,
+        <a href="https://unsplash.com/@stephenodonn" target="_blank" class="app__credentials-link">
+          Unsplash
+        </a>
+      </span>
     </div>
   </main>
 </template>
@@ -97,6 +103,21 @@
       }
     }
   }
+
+  &__credentials {
+    color: $color-white;
+    display: block;
+    text-align: center;
+
+    &-link,
+    &-link:active,
+    &-link:hover,
+    &-link:link,
+    &-link:visited {
+      color: $color-white;
+    }
+  }
+
   @media #{$tablet} {
     &__header {
       background: url('./assets/bgr_tablet.jpeg') top center no-repeat;
@@ -127,6 +148,11 @@
     &__location-map {
       flex: 0 1 200px;
       margin: 0 0 0 10px;
+    }
+
+    &__credentials {
+      padding: 0 20px 0 0;
+      text-align: right;
     }
   }
 }
