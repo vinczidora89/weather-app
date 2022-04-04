@@ -1,60 +1,85 @@
 <script setup>
-    import WeatherSimple from './WeatherSimple.vue';
-    import { defineProps } from "@vue/runtime-core";
+  import { defineAsyncComponent } from 'vue';
+  import { computed } from '@vue/reactivity';
+  import { useWeatherStore } from '@/stores/weather';
+  import LocationMap from '../location/LocationMap.vue';
 
-    const props = defineProps({
-        days: Array,
-        title: String,
-        type: String,
-    });
+  const store = useWeatherStore();
+
+  const WeatherCurrent = defineAsyncComponent(() => import('./WeatherCurrent.vue'));
+  const WeatherPlaceholder = defineAsyncComponent(() => import('./WeatherPlaceholder.vue'));
+  const WeatherWrapper = defineAsyncComponent(() => import('./WeatherSimpleWrapper.vue'));
+
+  const futureWeatherData = computed(() => store.weatherForecast && store.weatherForecast.length > 0);
+  const pastWeatherData = computed(() => store.weatherPast && store.weatherPast.length === 5);
+  const shouldShowLocationMap = computed(() =>
+      store.coordinatesFilled
+  );
 </script>
 
 <template>
-    <div class="weather-wrappper">
-        <h2 class="weather-wrappper__title">
-            {{ props.title }}
-        </h2>
-        <div class="weather-wrappper__wrapper">
-            <WeatherSimple v-for="(day, index) in props.days"
-                           :key="index"
-                           :index="index"
-                           :forecast="day"
-                           :type="props.type">
-            </WeatherSimple>
-        </div>
+  <Suspense>
+    <div :class="['weather-wrapper__data', {'is-changed': store.cityChanged}]">-->
+      <div class="weather-wrapper__current-and-map">
+        <WeatherCurrent></WeatherCurrent>
+        <LocationMap class="weather-wrapper__location-map" v-if="shouldShowLocationMap">
+        </LocationMap>
+      </div>
+      <WeatherWrapper v-if="futureWeatherData"
+                      title="Weather for the next 7 days:"
+                      type="future"
+                      :days="store.weatherForecast">
+      </WeatherWrapper>
+      <WeatherWrapper v-if="pastWeatherData"
+                      title="Weather in the last 5 days:"
+                      type="past"
+                      :days="store.weatherPast">
+      </WeatherWrapper>
     </div>
+
+    <template #fallback>
+      <WeatherPlaceholder></WeatherPlaceholder>
+    </template>
+  </Suspense>
 </template>
 
 <style scoped lang="scss">
-    .weather-wrappper {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        width: 100%;
+  .weather-wrapper {
+    &__data {
+      margin: 0 auto;
+      padding: 10px 0;
+      width: 100%;
 
-        &__title {
-            color: $color-white;
-            margin: 0 auto 20px;
-            text-align: center;
+      &.is-changed {
+        position: relative;
+
+        &:after {
+          background-color: $color-white;
+          content: '';
+          display: block;
+          height: 100%;
+          left: 0;
+          opacity: .3;
+          position: absolute;
+          top: 0;
+          width: 100%;
         }
-
-        &__wrapper {
-            display: grid;
-            grid-template-columns: auto auto;
-            grid-template-rows: auto;
-            gap: 10px 10px;
-        }
-
-        @media #{$tablet}, #{$desktop} {
-            background-color: lighten($color-abbey, 10%);
-            border-radius: 4px;
-            box-shadow: 3px 3px 4px $color-black-transparent;
-
-            &__wrapper {
-                display: flex;
-                justify-content: center;
-                gap: 0;
-            }
-        }
+      }
     }
+
+    @media #{$tablet}, #{$desktop} {
+      &__current-and-map {
+        display: flex;
+        justify-content: center;
+        margin: 30px auto;
+        max-width: 6000px;
+        width: 100%;
+      }
+
+      &__location-map {
+        flex: 0 1 200px;
+        margin: 0 0 0 10px;
+      }
+    }
+  }
 </style>

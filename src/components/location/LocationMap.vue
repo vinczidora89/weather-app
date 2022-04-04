@@ -13,6 +13,7 @@
     if (store.coordinatesFilled) {
       const map = new google.maps.Map(mapDiv.value, {
         center: currentPosition.value,
+        disableDefaultUI: true,
         zoom: 10,
       })
       new google.maps.Marker({

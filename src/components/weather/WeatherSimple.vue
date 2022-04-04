@@ -2,9 +2,10 @@
     import { defineProps } from "@vue/runtime-core";
     import { computed } from "@vue/reactivity";
     import { useWeatherStore } from '@/stores/weather';
-    import FallbackWeatherIcon from './FallbackWeatherIcon.vue';
     import Utility from '../../Utility';
+    import { defineAsyncComponent } from "vue";
 
+    const FallbackWeatherIcon = defineAsyncComponent(() => import('./FallbackWeatherIcon.vue'));
     const store = useWeatherStore();
 
     const props = defineProps({

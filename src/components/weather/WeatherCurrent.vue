@@ -1,11 +1,11 @@
 <script setup>
-    import FallbackWeatherIcon from './FallbackWeatherIcon.vue';
     import WeatherDetails from './WeatherDetails.vue';
     import { useWeatherStore } from '@/stores/weather';
     import { computed } from "@vue/reactivity";
+    import { defineAsyncComponent } from "vue";
 
+    const FallbackWeatherIcon = defineAsyncComponent(() => import('./FallbackWeatherIcon.vue'));
     const store = useWeatherStore();
-
     const iconUrl = computed(() => `${store.baseUrlIcons}/img/wn/${store.currentIcon}@2x.png`);
 </script>
 
@@ -15,7 +15,7 @@
             <span class="weather-current__location">
               {{ store.weatherCity }} ({{ store.weatherCountry }}):
             </span>
-            <img v-if="store.currentIcon" class="weather-current__icon" :src="iconUrl"/>
+            <img v-if="store.currentIcon" class="weather-current__icon" alt="weather icon" :src="iconUrl"/>
             <FallbackWeatherIcon v-else></FallbackWeatherIcon>
             <span class="weather-current__description">
                 {{ store.currentWeather.main }}
