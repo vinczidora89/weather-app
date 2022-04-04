@@ -9,6 +9,7 @@
   import { computed } from "@vue/reactivity";
   import { useWeatherStore } from '@/stores/weather';
   import { onMounted } from "vue";
+  import Utility from './Utility';
 
   const store = useWeatherStore();
 
@@ -20,11 +21,12 @@
   );
 
   onMounted(() => {
+    const initialCity = Utility.getUrlParam('city', 'Budapest');
     const locationDataDenied = localStorage.getItem('locationDataDenied');
     if (locationDataDenied && locationDataDenied === 'true') {
       store.locationDataHide = true;
     }
-    store.getWeatherByDefaultCity('Debrecen');
+    store.getWeatherByDefaultCity(initialCity);
   })
 </script>
 
