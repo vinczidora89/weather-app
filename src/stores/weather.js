@@ -14,7 +14,6 @@ export const useWeatherStore = defineStore({
             lat: null,
             long: null
         },
-        errorType: null,
         locationDataHide: false,
         formattedAddress: null,
         isLoading: false,

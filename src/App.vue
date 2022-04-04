@@ -36,6 +36,10 @@
   </header>
 
   <main class="app__main">
+    <div v-if="store.hasError" class="app__error">
+      <span class="app__error-text">Unfortunately something went wrong.</span>
+      <span class="app__error-text">Please try again!</span>
+    </div>
     <WeatherPlaceholder v-if="store.isLoading"></WeatherPlaceholder>
     <div v-else :class="['app__weather-wrapper', {'is-changed': store.cityChanged}]">
       <div class="app__current-and-map">
@@ -79,6 +83,21 @@
       position: absolute;
       bottom: 0;
       width: 100%;
+    }
+  }
+
+  &__error {
+    background: $color-mercury;
+    border-radius: 4px;
+    margin: 10px auto;
+    padding: 10px;
+    width: 300px;
+
+    &-text {
+      color: $color-firebrick;
+      display: block;
+      font-size: 16px;
+      text-align: center;
     }
   }
 

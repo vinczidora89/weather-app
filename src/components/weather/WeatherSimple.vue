@@ -2,6 +2,7 @@
     import { defineProps } from "@vue/runtime-core";
     import { computed } from "@vue/reactivity";
     import { useWeatherStore } from '@/stores/weather';
+    import FallbackWeatherIcon from './FallbackWeatherIcon.vue';
     import Utility from '../../Utility';
 
     const store = useWeatherStore();
@@ -15,14 +16,15 @@
     const date = computed(() => Utility.timestampToDate(props.forecast.dt));
     const temp = computed(() => props.type === 'past' ? props.forecast.temp : props.forecast.temp.day);
     const iconName = props.type === 'past' ? store.pastIcon(props.index) : store.forecastIcon(props.index);
-    const iconUrl = computed(() => `${store.baseUrlIcons}/img/wn/${iconName}.png`);
+    const iconUrl = computed(() => iconName && `${store.baseUrlIcons}/img/wn/${iconName}.png`);
 
     const isEven = (props.index + 1) % 2 === 0;
 </script>
 
 <template>
     <div :class="['weather-simple', {'is-even': isEven}]">
-        <img v-if="store.currentIcon" class="weather-simple__icon" :src="iconUrl"/>
+        <img v-if="iconName" class="weather-simple__icon" :src="iconUrl"/>
+        <FallbackWeatherIcon v-else :is-small="true"></FallbackWeatherIcon>
         <span class="weather-simple__data weather-simple__data--date">
             {{ date }}
         </span>

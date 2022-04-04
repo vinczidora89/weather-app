@@ -1,4 +1,5 @@
 <script setup>
+    import FallbackWeatherIcon from './FallbackWeatherIcon.vue';
     import WeatherDetails from './WeatherDetails.vue';
     import { useWeatherStore } from '@/stores/weather';
     import { computed } from "@vue/reactivity";
@@ -15,6 +16,7 @@
               {{ store.weatherCity }} ({{ store.weatherCountry }}):
             </span>
             <img v-if="store.currentIcon" class="weather-current__icon" :src="iconUrl"/>
+            <FallbackWeatherIcon v-else></FallbackWeatherIcon>
             <span class="weather-current__description">
                 {{ store.currentWeather.main }}
                 ({{ store.currentWeather.description }})
