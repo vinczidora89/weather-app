@@ -3,6 +3,11 @@
     import IconCloud from './icons/IconCloud.vue';
     import IconSun from './icons/IconSun.vue';
     import IconUmbrella from './icons/IconUmbrella.vue';
+    import { defineProps } from "@vue/runtime-core";
+
+    const props = defineProps({
+        title: String,
+    });
 </script>
 
 <template>
@@ -12,7 +17,7 @@
             <IconCloud></IconCloud>
         </div>
         <h1 class="header__title">
-            Weather App
+          {{ props.title }}
         </h1>
       <div class="header__icons">
         <IconSun></IconSun>

@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-import {Loader} from "@googlemaps/js-api-loader";
-
 export default {
     twoDigitsWithZeroes(value) {
         return value < 9 ? `0${value}` : `${value}`;
