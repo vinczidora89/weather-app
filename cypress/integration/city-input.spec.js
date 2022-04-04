@@ -19,12 +19,12 @@ describe('City input test', () => {
     })
     it('fills the city input and gets weather for the selected location', () => {
         cy.get('input').clear();
-        cy.get('input').type('Budapest');
+        cy.get('input').type('Nagykanizsa');
         cy.get('.city-input__options').should('exist')
         cy.get('.city-input__option').should('exist')
         cy.get('.city-input__option').first().click()
         cy.get('button').should('not.be.disabled')
         cy.get('.city-input__button').click()
-        cy.get('.weather-current__location').contains('Budapest')
+        cy.get('.weather-current__location').contains('Nagykanizsa')
     })
 })

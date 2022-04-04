@@ -25,7 +25,7 @@
 <template>
   <header class="app__header">
     <RequestLocation v-if="!store.locationDataHide"></RequestLocation>
-    <HeaderComponent title="WeatherApp"/>
+    <HeaderComponent title="Weather App"/>
     <CityInput class="app__location-city"></CityInput>
   </header>
 
