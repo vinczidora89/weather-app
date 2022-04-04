@@ -2,15 +2,15 @@
   import { defineAsyncComponent } from 'vue';
   import { computed } from '@vue/reactivity';
   import { useWeatherStore } from '@/stores/weather';
-  import LocationMap from '../location/LocationMap.vue';
+
+  const LocationMap = defineAsyncComponent(() => import('../location/LocationMap.vue'));
+  const WeatherCurrent = defineAsyncComponent(() => import('./WeatherCurrent.vue'));
+  const WeatherPlaceholder = defineAsyncComponent(() => import('./WeatherPlaceholder.vue'));
+  const WeatherSimpleWrapper = defineAsyncComponent(() => import('./WeatherSimpleWrapper.vue'));
 
   const store = useWeatherStore();
 
-  const WeatherCurrent = defineAsyncComponent(() => import('./WeatherCurrent.vue'));
-  const WeatherPlaceholder = defineAsyncComponent(() => import('./WeatherPlaceholder.vue'));
-  const WeatherWrapper = defineAsyncComponent(() => import('./WeatherSimpleWrapper.vue'));
-
-  const futureWeatherData = computed(() => store.weatherForecast && store.weatherForecast.length > 0);
+  const futureWeatherData = computed(() => store.weatherFuture && store.weatherFuture.length > 0);
   const pastWeatherData = computed(() => store.weatherPast && store.weatherPast.length === 5);
   const shouldShowLocationMap = computed(() =>
       store.coordinatesFilled
@@ -25,16 +25,16 @@
         <LocationMap class="weather-wrapper__location-map" v-if="shouldShowLocationMap">
         </LocationMap>
       </div>
-      <WeatherWrapper v-if="futureWeatherData"
-                      title="Weather for the next 7 days:"
+      <WeatherSimpleWrapper v-if="futureWeatherData"
+                      title="Weather in the next 7 days:"
                       type="future"
-                      :days="store.weatherForecast">
-      </WeatherWrapper>
-      <WeatherWrapper v-if="pastWeatherData"
+                      :days="store.weatherFuture">
+      </WeatherSimpleWrapper>
+      <WeatherSimpleWrapper v-if="pastWeatherData"
                       title="Weather in the last 5 days:"
                       type="past"
                       :days="store.weatherPast">
-      </WeatherWrapper>
+      </WeatherSimpleWrapper>
     </div>
 
     <template #fallback>
@@ -67,7 +67,7 @@
       }
     }
 
-    @media #{$tablet}, #{$desktop} {
+    @media #{$tablet-and-desktop} {
       &__current-and-map {
         display: flex;
         justify-content: center;

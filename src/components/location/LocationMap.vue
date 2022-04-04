@@ -1,7 +1,7 @@
 <script setup>
   /* eslint-disable no-undef */
   import { onMounted, ref, watch } from 'vue';
-  import { computed } from "@vue/reactivity";
+  import { computed } from '@vue/reactivity';
   import { useWeatherStore } from '@/stores/weather';
   import { Loader } from '@googlemaps/js-api-loader';
 
@@ -28,10 +28,10 @@
   });
 
   watch(
-      () => store.weatherCity,
-      () => {
-        renderMap();
-      },
+    () => store.weatherCity,
+    () => {
+      renderMap();
+    },
   )
 
   const currentPosition = computed(() => ({
@@ -43,19 +43,19 @@
 </script>
 
 <template>
-    <div class="location-map">
-        <div ref="mapDiv" class="location-map__container"></div>
-    </div>
+  <div class="location-map">
+    <div ref="mapDiv" class="location-map__container"></div>
+  </div>
 </template>
 
 <style scoped lang="scss">
   .location-map {
-      &__container {
-          height: 50vh;
-          margin: 0 auto;
-          max-height: 421px;
-          max-width: 400px;
-          width: 100%;
-      }
+    &__container {
+      height: 50vh;
+      margin: 0 auto;
+      max-height: 421px;
+      max-width: 400px;
+      width: 100%;
+    }
   }
 </style>

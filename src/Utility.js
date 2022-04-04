@@ -1,13 +1,9 @@
 export default {
-    getUrlParam(param, defaultValue) {
+    getUrlParam(param) {
         let result = null;
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            result = urlParams.get(param);
-        } catch {
-            result = this.getUrlParamByName(param);
-        }
-        return result || defaultValue || '';
+        const urlParams = new URLSearchParams(window.location.search);
+        result = urlParams.get(param);
+        return result || '';
     },
     timestampToDate(value) {
         const date = new Date(value * 1000);

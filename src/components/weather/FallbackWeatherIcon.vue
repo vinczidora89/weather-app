@@ -1,6 +1,6 @@
 <script setup>
+  import { defineProps } from '@vue/runtime-core';
   import IconUmbrella from '../icons/IconUmbrella.vue';
-  import { defineProps } from "@vue/runtime-core";
 
   const props = defineProps({
     isSmall: Boolean,

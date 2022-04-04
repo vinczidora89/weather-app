@@ -41,17 +41,6 @@
   .weather-placeholder {
     opacity: 0.8;
 
-    &__current-and-map {
-      @media #{$tablet}, #{$desktop} {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        margin: 0 auto;
-        max-width: 6000px;
-        width: 100%;
-      }
-    }
-
     &__current {
       background-color: $color-white;
       border-radius: 4px;
@@ -61,11 +50,6 @@
       margin: 20px auto;
       padding: 20px;
       width: 100%;
-
-      @media #{$tablet}, #{$desktop} {
-        flex: 0 1 400px;
-        margin: 30px 0;
-      }
 
       &-title {
         background-color: $color-mercury;
@@ -112,11 +96,6 @@
       max-height: 421px;
       max-width: 400px;
       width: 100%;
-
-      @media #{$tablet}, #{$desktop} {
-        flex: 0 1 200px;
-        margin: 0 0 0 10px;
-      }
     }
 
     &__wrapper {
@@ -139,12 +118,6 @@
         grid-template-columns: auto auto;
         grid-template-rows: auto;
         gap: 10px 10px;
-
-        @media #{$tablet}, #{$desktop} {
-          display: flex;
-          justify-content: center;
-          gap: 0;
-        }
       }
     }
 
@@ -176,12 +149,37 @@
         height: 32px;
         width: 100%;
       }
+    }
 
-      &.is-even {
-        background-color: darken($color-white, 10%);
+    @media #{$tablet-and-desktop} {
+      &__current-and-map {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+        max-width: 6000px;
+        width: 100%;
       }
 
-      @media #{$tablet}, #{$desktop} {
+      &__current {
+        flex: 0 1 400px;
+        margin: 30px 0;
+      }
+
+      &__map {
+        flex: 0 1 200px;
+        margin: 0 0 0 10px;
+      }
+
+      &__wrapper {
+        &-container {
+          display: flex;
+          gap: 0;
+          justify-content: center;
+        }
+      }
+
+      &__simple {
         margin: 0 6px 0 0;
       }
     }

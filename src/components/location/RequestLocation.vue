@@ -1,10 +1,13 @@
 <script setup>
-  import { reactive } from "@vue/reactivity";
-  import { useWeatherStore } from '@/stores/weather';
+  import { defineAsyncComponent } from 'vue';
+  import { reactive } from '@vue/reactivity';
   import IconClose from '../icons/IconClose.vue';
-  import LoaderComponent from '../LoaderComponent.vue';
+  import { useWeatherStore } from '@/stores/weather';
+
+  const LoaderComponent = defineAsyncComponent(() => import('../LoaderComponent.vue'));
 
   const store = useWeatherStore();
+
   const state= reactive({
     errorMessage: null,
     gettingLocation: false,
@@ -75,6 +78,7 @@
 <style scoped lang="scss">
   .request-location {
     background-color: $color-abbey;
+    box-shadow: 3px 3px 4px $color-black-transparent;
     color: $color-white;
     left: 0;
     margin: 0 auto;
@@ -126,11 +130,7 @@
       }
     }
 
-    &__error {
-      color: $color-firebrick;
-    }
-
-    @media #{$tablet}, #{$desktop} {
+    @media #{$tablet-and-desktop} {
       &__wrapper {
         max-width: 500px;
       }

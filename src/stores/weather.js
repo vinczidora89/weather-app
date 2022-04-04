@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 import { defineStore } from 'pinia';
-import axios from "axios";
+import axios from 'axios';
 import cities from 'cities.json';
 import Utility from '../Utility';
-import {Loader} from "@googlemaps/js-api-loader";
+import { Loader } from '@googlemaps/js-api-loader';
 
 export const useWeatherStore = defineStore({
     id: 'weather',
@@ -26,7 +26,7 @@ export const useWeatherStore = defineStore({
         weatherCountry: null,
         weatherCurrent: null,
         weatherToday: null,
-        weatherForecast: [],
+        weatherFuture: [],
         weatherPast: [],
     }),
     getters: {
@@ -40,8 +40,8 @@ export const useWeatherStore = defineStore({
         currentTemperature: (state) => state.weatherCurrent && state.weatherCurrent.temp,
         currentWeather: (state) => state.weatherCurrent && state.weatherCurrent.weather[0],
         coordinatesFilled: (state) => state.coordinates.lat && state.coordinates.long,
-        forecastIcon: (state) => {
-            return (index) => state.weatherForecast && state.weatherForecast[index].weather[0].icon
+        futureIcon: (state) => {
+            return (index) => state.weatherFuture && state.weatherFuture[index].weather[0].icon
         },
         pastIcon: (state) => {
             return (index) => state.weatherPast && state.weatherPast[index].weather[0].icon
@@ -51,13 +51,17 @@ export const useWeatherStore = defineStore({
         todaysTemperatures: (state) => state.weatherToday && state.weatherToday.temp,
     },
     actions: {
-        getWeatherByDefaultCity(cityName) {
+        getCityFromList(cityName) {
             let matchingCity = null;
             cities.find(city => {
                 if (cityName === city.name) {
                     matchingCity = city;
                 }
             });
+            return matchingCity;
+        },
+        getWeatherByDefaultCity(cityName) {
+            const matchingCity = this.getCityFromList(cityName);
 
             if (matchingCity) {
                 this.selectedCity = matchingCity.name;
@@ -71,10 +75,6 @@ export const useWeatherStore = defineStore({
 
                 this.getWeatherData();
             }
-        },
-        setCoordinates(value) {
-            this.coordinates.lat = value.lat;
-            this.coordinates.long = value.long;
         },
         async geocodeCoordinates() {
             const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
@@ -121,7 +121,7 @@ export const useWeatherStore = defineStore({
                 this.hasError = false;
                 this.weatherCurrent = response.data.current;
                 this.weatherToday = response.data.daily[0];
-                this.weatherForecast = response.data.daily.slice(1);
+                this.weatherFuture = response.data.daily.slice(1);
             }
             catch (error) {
                 this.hasError = true;

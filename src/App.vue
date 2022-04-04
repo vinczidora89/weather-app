@@ -13,7 +13,8 @@
   const store = useWeatherStore();
 
   onMounted(() => {
-    const initialCity = Utility.getUrlParam('city', 'Budapest');
+    const cityParam = Utility.getUrlParam('city');
+    const initialCity = (store.getCityFromList(cityParam) && store.getCityFromList(cityParam).name) || 'Budapest';
     const locationDataDenied = localStorage.getItem('locationDataDenied');
     if (locationDataDenied && locationDataDenied === 'true') {
       store.locationDataHide = true;
