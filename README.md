@@ -1,8 +1,7 @@
 # weather-app
 
 ## Project summary
-This is an app that shows the current weather in a selected city, with additional details, a map with the selected location,
-and the weather summary for the past 7 and next 5 days.
+This is an app that shows the current, past and future weather in a selected city.
 
 ## Getting started
 to install the project dependencies:
@@ -48,7 +47,7 @@ There is one unit test with Cypress Component testing, and three integration tes
 
 <strong>API keys</strong>
 
-The API keys necessary for the Google Maps and OpenWeather http requests are stored in a .env file, and there is a .env.example to display the required keys' names.
+The API keys necessary for the Google Maps and OpenWeatherMap http requests are stored in a .env file, and there is a .env.example to display the required keys' names.
 
 <strong>Location</strong>
 
@@ -60,7 +59,7 @@ The 'City-Input' component looks up the city options based on the input value in
 
 <strong>Weather Information</strong>
 
-The weather information is received from the OpenWeather API (One Call API endpoint for the current weather and forecast, and Historical Weather API for the past weather, both are in metric measurements). It is  displayed in three components: the current weather with details in a dropdown component, the weather for the next 7 days and the weather for the last 5 days. Every day’s weather has their corresponding icon displayed from  OpenWeather API (and there is a fallback icon for the time when that information is not available). 
+The weather information is received from the OpenWeatherMap API (One Call API endpoint for the current weather and forecast, and Historical Weather API for the past weather, both are in metric measurements). It is  displayed in three components: the current weather with details in a dropdown component, the weather for the next 7 days and the weather for the last 5 days. Every day’s weather has their corresponding icon displayed from  OpenWeather API (and there is a fallback icon for the time when that information is not available). 
 
 Until the data from the API is returned, a schematic weather template is displayed as a fallback template in Suspense.
 If there is an error in the request, there is an error message shown.
